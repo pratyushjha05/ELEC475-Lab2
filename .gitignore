@@ -1,0 +1,14 @@
+# Datasets and environment (re-created from requirements.txt / downloaded by the scripts)
+data/
+.venv/
+__pycache__/
+*.pyc
+
+# Checkpoints: keep only the three the handout requires (zoo_alexnet.pth is 218 MB, over GitHub's 100 MB limit)
+checkpoints/*.pth
+!checkpoints/lenet_baseline.pth
+!checkpoints/lenet_modern.pth
+!checkpoints/alexnet_bn.pth
+
+# Archives
+*.zip
