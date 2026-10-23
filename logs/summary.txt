@@ -1,0 +1,18 @@
+| Run | Ep | Params (M) | MFLOPs | Final Val Acc | Final Val F1 | Best Val Acc | Final Train Acc | Gap (Train-Val) | Final Val Loss | Mean Epoch (s) |
+|---|---|---|---|---|---|---|---|---|---|---|
+| 1. Base LeNet-5                |  5 | 0.338 | 7.17 | 54.41 | 54.30 | 54.41 (ep 5) | 58.12 | 3.71 | 1.2879 | 22.2 |
+| 2. Modernized LeNet            |  5 | 0.446 | 9.19 | 65.36 | 65.27 | 65.36 (ep 5) | 70.04 | 4.68 | 0.9893 | 22.4 |
+| 3. AlexNet (No Norm)           | 10 | 6.609 | 436.70 | 73.52 | 73.48 | 73.52 (ep 10) | 74.84 | 1.32 | 0.7717 | 24.5 |
+| 4. AlexNet + LRN               | 10 | 6.609 | 436.70 | 75.14 | 75.02 | 75.14 (ep 10) | 78.76 | 3.62 | 0.7452 | 26.8 |
+| 5. AlexNet + BatchNorm         | 10 | 6.611 | 437.97 | 79.93 | 80.06 | 79.93 (ep 10) | 84.86 | 4.93 | 0.6172 | 25.1 |
+| 6. AlexNet + BN + Aug          | 15 | 6.611 | 437.97 | 81.65 | 81.26 | 82.83 (ep 13) | 84.64 | 2.99 | 0.5222 | 53.9 |
+| 7. PyTorch Zoo AlexNet         | 10 | 57.045 | 188.20 | 64.67 | 64.12 | 64.85 (ep 8) | 67.62 | 2.95 | 1.0255 | 28.8 |
+| AlexNet + BN, 15 ep, no aug    | 15 | 6.611 | 437.97 | 78.59 | 78.33 | 81.18 (ep 14) | 90.31 | 11.72 | 0.7104 | 25.3 |
+| Tiny: AlexNet + BN + Aug       | 10 | 6.806 | 438.36 | 28.31 | 26.99 | 29.20 (ep 9) | 27.14 | -1.17 | 3.0779 | 113.1 |
+| Tiny: Base LeNet-5             |  5 | 0.355 | 7.20 | 9.56 | 7.30 | 9.56 (ep 5) | 11.45 | 1.89 | 4.3755 | 48.9 |
+| Tiny: Modernized LeNet         |  5 | 0.462 | 9.22 | 18.83 | 16.30 | 18.83 (ep 5) | 20.18 | 1.35 | 3.6978 | 49.1 |
+
+Multi-seed results (CIFAR-10, 5 epochs, seeds 42/1/2), final epoch:
+  Base LeNet-5 (n=3): Val Acc 53.52 ± 0.84% | Macro F1 53.25 ± 0.91%
+  Modernized LeNet (n=3): Val Acc 65.40 ± 0.04% | Macro F1 65.30 ± 0.03%
+Master ablation summary plot saved to: plots/ablation_summary.png

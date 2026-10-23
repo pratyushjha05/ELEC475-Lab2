@@ -1,0 +1,50 @@
+ELEC 475 Lab 2 - Exact commands used to produce all results
+Run from the lab2_template folder with the virtual environment active:
+    .\.venv\Scripts\Activate.ps1          (Windows PowerShell)
+    source .venv/bin/activate             (Linux / macOS / Colab not needed)
+All runs use seed 42 unless stated (train.py default). Output of each run was saved to logs/<name>.txt.
+
+# ---------------- Pre-Lab ----------------
+python -m venv .venv
+pip install -r requirements.txt
+python -m utils.eda --dataset both        # handout's "python utils/eda.py" fails (relative import), module form works
+python prelab_verify.py
+
+# ---------------- In-Lab (CIFAR-10, 5 epochs) ----------------
+python -m models.lenet
+python train.py --model lenet --dataset cifar10 --epochs 5 --batch-size 128 --seed 42 --no-augment --save-model checkpoints/lenet_baseline.pth --plot-file plots/loss_lenet.png
+python -m models.lenet_modern
+python train.py --model lenet_modern --dataset cifar10 --epochs 5 --batch-size 128 --seed 42 --no-augment --save-model checkpoints/lenet_modern.pth --plot-file plots/loss_lenet_modern.png
+# (--no-augment added: augmentation was not yet implemented during the in-lab, so these match the in-lab runs)
+
+# ---------------- Post-Lab Step 1: AlexNet-64 ----------------
+python -m models.alexnet
+
+# ---------------- Post-Lab Step 2: Normalization study (CIFAR-10, 10 epochs, no augmentation) ----------------
+python train.py --model alexnet --norm none --dataset cifar10 --epochs 10 --no-augment --save-model checkpoints/alexnet_none.pth --plot-file plots/loss_alexnet_none.png
+python train.py --model alexnet --norm lrn  --dataset cifar10 --epochs 10 --no-augment --save-model checkpoints/alexnet_lrn.pth  --plot-file plots/loss_alexnet_lrn.png
+python train.py --model alexnet --norm bn   --dataset cifar10 --epochs 10 --no-augment --save-model checkpoints/alexnet_bn.pth   --plot-file plots/loss_alexnet_bn.png
+
+# ---------------- Post-Lab Step 3: Data augmentation (CIFAR-10, 15 epochs) ----------------
+python train.py --model alexnet --norm bn --dataset cifar10 --epochs 15 --no-augment --save-model checkpoints/alexnet_no_aug.pth   --plot-file plots/loss_no_aug.png
+python train.py --model alexnet --norm bn --dataset cifar10 --epochs 15              --save-model checkpoints/alexnet_with_aug.pth --plot-file plots/loss_with_aug.png
+
+# ---------------- Post-Lab: PyTorch Model Zoo AlexNet (CIFAR-10, 10 epochs, no augmentation) ----------------
+python train.py --model zoo_alexnet --dataset cifar10 --epochs 10 --no-augment --save-model checkpoints/zoo_alexnet.pth --plot-file plots/loss_zoo_alexnet.png
+
+# ---------------- Post-Lab Step 4: Tiny ImageNet-200 ----------------
+python train.py --model alexnet --norm bn --dataset tiny_imagenet --epochs 10 --save-model checkpoints/alexnet_tiny_imagenet.pth --plot-file plots/loss_tiny_imagenet.png
+python train.py --model lenet        --dataset tiny_imagenet --epochs 5 --no-augment --save-model checkpoints/lenet_tiny.pth        --plot-file plots/loss_lenet_tiny.png
+python train.py --model lenet_modern --dataset tiny_imagenet --epochs 5 --no-augment --save-model checkpoints/lenet_modern_tiny.pth --plot-file plots/loss_lenet_modern_tiny.png
+
+# ---------------- Extended ablation: multi-seed LeNet (CIFAR-10, 5 epochs, seeds 42/1/2) ----------------
+# seed 42 runs are the in-lab runs above
+python train.py --model lenet        --dataset cifar10 --epochs 5 --seed 1 --no-augment --plot-file plots/loss_lenet_seed1.png
+python train.py --model lenet        --dataset cifar10 --epochs 5 --seed 2 --no-augment --plot-file plots/loss_lenet_seed2.png
+python train.py --model lenet_modern --dataset cifar10 --epochs 5 --seed 1 --no-augment --plot-file plots/loss_lenet_modern_seed1.png
+python train.py --model lenet_modern --dataset cifar10 --epochs 5 --seed 2 --no-augment --plot-file plots/loss_lenet_modern_seed2.png
+
+# ---------------- Post-Lab Step 5: Profiling, demo, summary plot ----------------
+python compare_models.py --dataset cifar10     # handout's "--device cuda" flag does not exist; device is auto-detected
+python demo_transforms.py
+python make_ablation_plot.py                   # replaces "python -m utils.visualization --plot-ablation" (no CLI exists); writes plots/ablation_summary.png
